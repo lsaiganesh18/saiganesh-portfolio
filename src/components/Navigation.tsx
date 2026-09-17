@@ -34,7 +34,7 @@ export function Navigation({ visible }: { visible: boolean }) {
       >
         <div
           className={`transition-all duration-500 ${scrolled ? 'glass' : ''}`}
-          style={{ padding: scrolled ? '0.75rem 0' : '1.5rem 0' }}
+          style={{ padding: scrolled ? '0.75rem 0' : '1.5rem 0', borderBottom: scrolled ? '1px solid rgba(255,255,255,0.04)' : '1px solid transparent' }}
         >
           <div className="max-w-[1400px] mx-auto px-6 sm:px-12 md:px-20 flex items-center justify-between">
             {/* logo */}

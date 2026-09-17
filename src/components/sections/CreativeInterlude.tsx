@@ -29,6 +29,8 @@ export function CreativeInterlude() {
 
   const line1Opacity = Math.min(1, scrollProgress * 3);
   const line2Opacity = Math.max(0, Math.min(1, (scrollProgress - 0.4) * 3));
+  const line1Scale = 0.9 + line1Opacity * 0.1;
+  const line2Scale = 0.7 + line2Opacity * 0.3;
   const orbScale = 0.8 + scrollProgress * 0.4;
   const orbRotate = scrollProgress * 180;
 
@@ -51,27 +53,29 @@ export function CreativeInterlude() {
       </div>
 
       <div className="relative z-10 text-center max-w-5xl mx-auto">
+        {/* first statement - enters slowly */}
         <div
           className="font-display text-white"
           style={{
             fontSize: 'clamp(2.5rem, 10vw, 9rem)',
             lineHeight: 0.9,
             opacity: visible ? line1Opacity : 0,
-            transform: visible ? `translateY(${(1 - line1Opacity) * 30}px)` : 'translateY(30px)',
+            transform: visible ? `translateY(${(1 - line1Opacity) * 30}px) scale(${line1Scale})` : 'translateY(30px) scale(0.9)',
             transition: 'opacity 0.8s ease, transform 0.8s ease',
           }}
         >
           DESIGN IS NOT<br />JUST HOW IT LOOKS.
         </div>
 
+        {/* second statement - stronger scale animation */}
         <div
           className="font-display mt-8"
           style={{
             fontSize: 'clamp(2.5rem, 10vw, 9rem)',
             lineHeight: 0.9,
             opacity: visible ? line2Opacity : 0,
-            transform: visible ? `translateY(${(1 - line2Opacity) * 30}px)` : 'translateY(30px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease',
+            transform: visible ? `translateY(${(1 - line2Opacity) * 40}px) scale(${line2Scale})` : 'translateY(40px) scale(0.7)',
+            transition: 'opacity 0.8s ease, transform 1s cubic-bezier(0.22,1,0.36,1)',
           }}
         >
           <span className="gradient-text-cyan">IT'S HOW</span><br />

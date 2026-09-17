@@ -74,6 +74,7 @@ function ProjectBlock({ project, index }: { project: Project; index: number }) {
   const { ref, visible } = useReveal<HTMLDivElement>(0.15);
   const numRef = useRef<HTMLDivElement>(null);
   const particlesRef = useRef<HTMLDivElement>(null);
+  const sweepRef = useRef<HTMLDivElement>(null);
   const [numScale, setNumScale] = useState(1.4);
   const [numOpacity, setNumOpacity] = useState(0.06);
   const isDesktop = project.mockup === 'desktop-sais';
@@ -119,6 +120,16 @@ function ProjectBlock({ project, index }: { project: Project; index: number }) {
     return () => particles.forEach((p) => p.remove());
   }, [project.accent]);
 
+  // trigger light sweep when visible
+  useEffect(() => {
+    if (visible && sweepRef.current) {
+      const timer = setTimeout(() => {
+        if (sweepRef.current) sweepRef.current.classList.add('active');
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [visible]);
+
   return (
     <div ref={ref} className="relative min-h-screen flex items-center overflow-hidden border-t border-white/5" data-project={project.num}>
       {/* big number background */}
@@ -156,12 +167,15 @@ function ProjectBlock({ project, index }: { project: Project; index: number }) {
         />
       )}
 
+      {/* project light sweep */}
+      <div ref={sweepRef} className="project-sweep" />
+
       <div className="relative z-10 max-w-[1400px] mx-auto w-full px-6 sm:px-12 md:px-20 py-20">
         <div className={`flex flex-col ${isDesktop ? 'lg:flex-col' : 'lg:flex-row'} ${isReversed && !isDesktop ? 'lg:flex-row-reverse' : ''} items-center gap-12 lg:gap-20`}>
           {/* mockup */}
           <div
-            className={`flex-shrink-0 ${visible ? 'opacity-100 translate-x-0' : 'opacity-0 ' + (isReversed ? '-translate-x-16' : 'translate-x-16')}`}
-            style={{ transition: 'opacity 1.2s cubic-bezier(0.22,1,0.36,1), transform 1.2s cubic-bezier(0.22,1,0.36,1)' }}
+            className={`flex-shrink-0 ${visible ? 'opacity-100 translate-x-0 blur-fade is-visible' : 'opacity-0 ' + (isReversed ? '-translate-x-16' : 'translate-x-16')}`}
+            style={{ transition: 'opacity 1.2s cubic-bezier(0.22,1,0.36,1), transform 1.2s cubic-bezier(0.22,1,0.36,1), filter 1s ease' }}
           >
             {project.mockup === 'phone-tripmate' && <PhoneMockup variant="tripmate" />}
             {project.mockup === 'phone-crave' && <PhoneMockup variant="crave" />}
@@ -183,7 +197,8 @@ function ProjectBlock({ project, index }: { project: Project; index: number }) {
                 lineHeight: 0.9,
                 opacity: visible ? 1 : 0,
                 transform: visible ? 'translateY(0)' : 'translateY(40px)',
-                transition: 'opacity 1s ease 0.4s, transform 1s cubic-bezier(0.22,1,0.36,1) 0.4s',
+                filter: visible ? 'blur(0)' : 'blur(10px)',
+                transition: 'opacity 1s ease 0.4s, transform 1s cubic-bezier(0.22,1,0.36,1) 0.4s, filter 1s ease 0.4s',
               }}
             >
               {project.title}

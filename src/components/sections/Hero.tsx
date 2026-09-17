@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 
 const disciplines = ['UI/UX DESIGN', 'PRODUCT DESIGN', 'WEB DESIGN', 'MOBILE APP DESIGN'];
+const statementLines = ['Designing digital experiences', 'that feel simple,', 'useful & memorable.'];
 
 export function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
   const orbRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
+  const [mouseX, setMouseX] = useState(0);
+  const [mouseY, setMouseY] = useState(0);
 
   useEffect(() => {
     let raf = 0;
@@ -20,21 +23,46 @@ export function Hero() {
     };
   }, []);
 
+  useEffect(() => {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    let raf = 0;
+    const onMove = (e: MouseEvent) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+        const y = (e.clientY / window.innerHeight - 0.5) * 2;
+        setMouseX(x);
+        setMouseY(y);
+      });
+    };
+    window.addEventListener('mousemove', onMove);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
   const titleScale = Math.max(0.82, 1 - scrollY / 2400);
   const titleOpacity = Math.max(0, 1 - scrollY / 700);
+  const titleBlur = Math.min(8, scrollY / 80);
   const bgOpacity = Math.max(0, 1 - scrollY / 900);
   const orbY = scrollY * 0.25;
   const orbRotate = scrollY * 0.05;
+  const orbMouseX = mouseX * 30;
+  const orbMouseY = mouseY * 30;
 
   return (
     <section ref={heroRef} className="relative min-h-screen flex flex-col justify-center overflow-hidden noise" id="hero">
       {/* animated 3D abstract background */}
       <div className="absolute inset-0 z-0" style={{ opacity: bgOpacity }}>
-        {/* main morphing gradient orb */}
+        {/* main morphing gradient orb with mouse parallax */}
         <div
           ref={orbRef}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          style={{ transform: `translate(-50%, calc(-50% + ${orbY}px)) rotate(${orbRotate}deg)` }}
+          className="absolute top-1/2 left-1/2"
+          style={{
+            transform: `translate(calc(-50% + ${orbMouseX}px), calc(-50% + ${orbY + orbMouseY}px)) rotate(${orbRotate}deg)`,
+            transition: 'transform 0.6s cubic-bezier(0.22,1,0.36,1)',
+          }}
         >
           <div
             className="w-[600px] h-[600px] sm:w-[700px] sm:h-[700px] animate-orb-morph opacity-40"
@@ -88,6 +116,8 @@ export function Hero() {
             transform: `scale(${titleScale})`,
             transformOrigin: 'left center',
             opacity: titleOpacity,
+            filter: `blur(${titleBlur}px)`,
+            transition: 'filter 0.1s linear',
           }}
         >
           <span className="mask-reveal is-visible"><span style={{ transitionDelay: '0.2s' }}>L SAI</span></span>
@@ -95,12 +125,23 @@ export function Hero() {
           <span className="mask-reveal is-visible"><span style={{ transitionDelay: '0.5s' }}>GANesh</span></span>
         </h1>
 
-        <p
-          className="mt-10 max-w-2xl text-lg sm:text-xl md:text-2xl text-[var(--text-dim)] leading-relaxed text-balance"
-          style={{ opacity: titleOpacity, transform: `translateY(${scrollY * -0.05}px)` }}
-        >
-          Designing digital experiences that feel simple, useful and memorable.
-        </p>
+        {/* multi-line statement with individual reveal */}
+        <div className="mt-10 max-w-2xl">
+          {statementLines.map((line, i) => (
+            <p
+              key={i}
+              className="text-lg sm:text-xl md:text-2xl text-[var(--text-dim)] leading-relaxed"
+              style={{
+                opacity: titleOpacity,
+                transform: `translateY(${scrollY * -0.05 + (1 - titleOpacity) * 20}px)`,
+                animation: `fadeUp 0.8s cubic-bezier(0.22,1,0.36,1) both`,
+                animationDelay: `${1.5 + i * 0.15}s`,
+              }}
+            >
+              {line}
+            </p>
+          ))}
+        </div>
 
         {/* disciplines */}
         <div className="mt-16 flex flex-wrap gap-x-8 gap-y-3">
@@ -110,7 +151,7 @@ export function Hero() {
               className="font-mono text-xs sm:text-sm tracking-[0.2em] text-white/70 border-l border-white/20 pl-3"
               style={{
                 animation: `fadeUp 0.8s cubic-bezier(0.22,1,0.36,1) both`,
-                animationDelay: `${1.2 + i * 0.15}s`,
+                animationDelay: `${2 + i * 0.15}s`,
               }}
             >
               {d}

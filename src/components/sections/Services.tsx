@@ -1,14 +1,14 @@
 import { useReveal } from '@/lib/hooks';
 
 const services = [
-  { name: 'UI/UX Design', color: 'rgba(124,58,237,0.12)' },
-  { name: 'Mobile App Design', color: 'rgba(6,182,212,0.12)' },
-  { name: 'Website Design', color: 'rgba(37,99,235,0.12)' },
-  { name: 'Product Design', color: 'rgba(217,70,239,0.12)' },
-  { name: 'Wireframing', color: 'rgba(236,72,153,0.12)' },
-  { name: 'Prototyping', color: 'rgba(249,115,22,0.12)' },
-  { name: 'Responsive Design', color: 'rgba(124,58,237,0.12)' },
-  { name: 'Design Systems', color: 'rgba(6,182,212,0.12)' },
+  { name: 'UI/UX Design', color: 'rgba(124,58,237,0.12)', glow: 'rgba(124,58,237,0.06)' },
+  { name: 'Mobile App Design', color: 'rgba(6,182,212,0.12)', glow: 'rgba(6,182,212,0.06)' },
+  { name: 'Website Design', color: 'rgba(37,99,235,0.12)', glow: 'rgba(37,99,235,0.06)' },
+  { name: 'Product Design', color: 'rgba(217,70,239,0.12)', glow: 'rgba(217,70,239,0.06)' },
+  { name: 'Wireframing', color: 'rgba(236,72,153,0.12)', glow: 'rgba(236,72,153,0.06)' },
+  { name: 'Prototyping', color: 'rgba(249,115,22,0.12)', glow: 'rgba(249,115,22,0.06)' },
+  { name: 'Responsive Design', color: 'rgba(124,58,237,0.12)', glow: 'rgba(124,58,237,0.06)' },
+  { name: 'Design Systems', color: 'rgba(6,182,212,0.12)', glow: 'rgba(6,182,212,0.06)' },
 ];
 
 export function Services() {
@@ -20,6 +20,10 @@ export function Services() {
       <div
         className="absolute bottom-0 left-1/4 w-[600px] h-[600px] rounded-full opacity-8 animate-drift-violet pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(124,58,237,0.25), transparent 70%)', filter: 'blur(50px)' }}
+      />
+      <div
+        className="absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full opacity-8 animate-drift-cyan pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.2), transparent 70%)', filter: 'blur(40px)' }}
       />
 
       <div className="max-w-[1400px] mx-auto w-full px-6 sm:px-12 md:px-20">
@@ -41,6 +45,11 @@ export function Services() {
                 transition: `opacity 0.7s ease ${i * 0.08}s, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 0.08}s`,
               }}
             >
+              {/* expanding background glow */}
+              <div
+                className="service-glow"
+                style={{ background: `radial-gradient(ellipse at center, ${s.glow}, transparent 70%)` }}
+              />
               <div className="service-glow" style={{ background: `linear-gradient(90deg, transparent, ${s.color}, transparent)` }} />
               <div className="relative flex items-center justify-between py-6 sm:py-8 cursor-default transition-all duration-500 group-hover:px-6">
                 <div className="flex items-center gap-6">
@@ -54,7 +63,10 @@ export function Services() {
                     {s.name}
                   </span>
                 </div>
-                <span className="text-white/20 group-hover:text-white/60 group-hover:translate-x-3 transition-all duration-500 text-2xl">
+                <span
+                  className="text-white/20 group-hover:text-white/60 transition-all duration-500 text-2xl group-hover:translate-x-3"
+                  style={{ display: 'inline-block' }}
+                >
                   →
                 </span>
               </div>

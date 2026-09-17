@@ -113,7 +113,7 @@ export function Contact() {
       {/* footer */}
       <footer
         className="absolute bottom-0 left-0 right-0 py-8 px-6 sm:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-white/5"
-        style={{ opacity: visible ? 1 : 0, transition: 'opacity 1s ease 1.4s' }}
+        style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)', transition: 'opacity 1s ease 1.4s, transform 1s ease 1.4s' }}
       >
         <div className="text-center sm:text-left">
           <p className="font-display text-sm text-white tracking-tight">L SAI GANESH</p>

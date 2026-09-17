@@ -10,6 +10,8 @@ const skills = [
 const marqueeRow1 = ['Figma', 'Wireframing', 'Prototyping', 'User Flows', 'Design Systems', 'Typography', 'Accessibility', 'Responsive Design'];
 const marqueeRow2 = ['Product Design', 'Web Design', 'Mobile App Design', 'Information Architecture', 'User Journey Mapping', 'Visual Hierarchy', 'Mobile-First Design', 'High-Fidelity Prototyping'];
 
+const directions = ['fadeInLeft', 'fadeInRight', 'fadeInScale', 'fadeUp', 'fadeInLeft', 'fadeInRight', 'fadeInScale', 'fadeUp', 'fadeInLeft', 'fadeInRight', 'fadeInScale', 'fadeUp', 'fadeInLeft', 'fadeInRight', 'fadeInScale'];
+
 export function Skills() {
   const { ref, visible } = useReveal<HTMLDivElement>(0.1);
 
@@ -19,6 +21,10 @@ export function Skills() {
       <div
         className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full opacity-10 animate-drift pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(124,58,237,0.3), transparent 70%)', filter: 'blur(40px)' }}
+      />
+      <div
+        className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full opacity-8 animate-drift-cyan pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.25), transparent 70%)', filter: 'blur(35px)' }}
       />
 
       <div className="max-w-[1400px] mx-auto w-full px-6 sm:px-12 md:px-20">
@@ -41,6 +47,7 @@ export function Skills() {
             >
               <span className="skill-glow" />
               <span className="skill-sweep" />
+              <span className="skill-underline" />
               {s}
               <span className="text-[var(--violet)]/40 ml-8">/</span>
             </span>
@@ -56,6 +63,7 @@ export function Skills() {
             >
               <span className="skill-glow" />
               <span className="skill-sweep" />
+              <span className="skill-underline" />
               {s}
               <span className="text-[var(--cyan)]/40 ml-8">/</span>
             </span>
@@ -63,7 +71,7 @@ export function Skills() {
         </div>
       </div>
 
-      {/* full skill list with vertical reveal */}
+      {/* full skill list with directional reveals */}
       <div className="max-w-[1400px] mx-auto w-full px-6 sm:px-12 md:px-20 mt-16">
         <div className="flex flex-wrap gap-x-6 gap-y-3 justify-center">
           {skills.map((skill, i) => (
@@ -72,8 +80,8 @@ export function Skills() {
               className="font-mono text-sm text-white/40 hover:text-white transition-colors duration-300 cursor-default"
               style={{
                 opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(20px)',
-                transition: `opacity 0.6s ease ${i * 0.04}s, transform 0.6s ease ${i * 0.04}s, color 0.3s ease`,
+                animation: visible ? `${directions[i]} 0.7s cubic-bezier(0.22,1,0.36,1) both` : 'none',
+                animationDelay: `${i * 0.06}s`,
               }}
             >
               {skill}
